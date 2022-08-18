@@ -1,0 +1,20 @@
+---
+- name: installing apache2, starting it and checking the url
+  hosts: 192.168.60.114
+  gather_facts: false
+  become: true
+  tasks:
+    - name: installing apache2
+      apt:
+        name: apache2
+        state: present
+    - name: starting apache2 service
+      service:
+        name: apache2
+        state: started
+    - name: checking the url
+      uri:
+       url: http://192.168.60.114
+       status_code: 200
+...
+
