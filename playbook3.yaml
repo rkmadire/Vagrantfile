@@ -1,0 +1,24 @@
+---
+- name: first play
+  hosts: 192.168.60.114
+  gather_facts: false
+  become: true
+  tasks:
+    - name: checking the apache2 status
+      service:
+        name: apache2
+        enabled: true
+- name: second play
+  hosts: 192.168.60.115
+  gather_facts: false
+  become: true
+  tasks: 
+    - name: installing postgresql
+      apt:
+        name: postgresql
+        state: present
+    - name: checking the postgresql status
+      service:
+        name: postgresql
+        enabled: true  
+...
