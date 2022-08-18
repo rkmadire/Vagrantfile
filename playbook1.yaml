@@ -1,0 +1,14 @@
+---
+- name: creating dir and files
+  hosts: all
+  tasks:
+    - name: creating a directory
+      file:
+        name: mydir1
+        state: directory
+    - name: creating a file
+      file:
+        name: mydir1/file1
+        state: touch
+...
+
