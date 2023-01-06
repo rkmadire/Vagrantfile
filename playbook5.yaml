@@ -1,0 +1,19 @@
+---
+- hosts: ubunt
+  remote_user: root
+  tasks:
+    - name: to update a repo
+      raw: apt-get update
+    - name: to install apache
+      apt:
+        name: apache2
+        state: present
+    - name: to deploy a file
+      copy:
+        src: /root/files/index.html
+        dest: /var/www/html/index.html
+    - name: to restart the service
+      service:
+        name: apache2
+        state: restarted
+...

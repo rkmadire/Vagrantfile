@@ -1,0 +1,31 @@
+---
+# to install java and tomcat packages and deploy war file
+- hosts: all
+  become: true
+  gather_facts: false
+  vars:
+    - pack1: java
+    - pack2: tomcat
+  tasks:
+    - name: to update repo
+      raw: yum update -y
+    - name: to install {{pack1}}
+      yum:
+        name: {{pack1}}
+        state: present
+    - name: to install {{pack2}}
+      package:
+        name: {{pack2}}
+        state: latest
+      notify:
+        - start tomcat
+    - name: to deploy a file
+      copy:
+        src: /root/files/sample.war
+        dest: /var/lib/tomcat/webapps/sample.war
+  handlers:
+    - name: start tomcat
+      systemd:
+        name: {{pack2}}
+        state: started
+...

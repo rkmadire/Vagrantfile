@@ -1,0 +1,46 @@
+---
+# playbook to install mysql server (ubunt) and mariadb server (cent)
+# for ubuntu and centos machines.
+- hosts: all
+  become: true
+  gather_facts: true
+  vars:
+    - pack1: mysql_server
+    - pack2: mariadb_server
+  tasks:
+    - name: to update repo
+      apt:
+        update_cache: yes
+      when:
+        ansible_distribution == 'Ubuntu'
+    - name: to update repo
+      yum:
+        update_cache: yes
+      when:
+        ansible_distribution: 'CentOS'
+    - name: to install {{pack1}}
+      package:
+        name: {{pack1}}
+        state: present
+      when:
+        ansible_pkg_mgr: 'apt'
+      notify:
+        - start mysql
+    - name: to install {{pack2}}
+      package:
+        name: {{pack2}}
+        state: present
+      when:
+        ansible_pkg_mgr: 'yum'
+      notify:
+        - start mariadb
+  handlers:
+    - start mysql
+      service:
+        name: mysql
+        state: started
+    - start mariadb
+      systemd:
+        name: mariadb
+        state: started
+...
